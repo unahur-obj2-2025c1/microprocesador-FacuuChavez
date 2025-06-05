@@ -18,7 +18,7 @@ public interface Programable {
 
     void setAcumuladorB(Integer value);
 
-    Integer getAcumuladorB();
+     Integer getAcumuladorB();
 
     void copyFrom(Programable programable);
 
