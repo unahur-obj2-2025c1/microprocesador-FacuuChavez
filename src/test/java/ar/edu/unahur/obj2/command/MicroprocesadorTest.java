@@ -95,6 +95,4 @@ public class MicroprocesadorTest {
          assertEquals(0,micro.getAcumuladorB());
 
      }
-
-
 }
