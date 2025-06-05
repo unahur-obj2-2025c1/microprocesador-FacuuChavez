@@ -1,6 +1,7 @@
 package ar.edu.unahur.obj2.command;
 
 import ar.edu.unahur.obj2.command.comandos.*;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -10,70 +11,75 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MicroprocesadorTest {
      Microprocesador micro = new Microprocesador();
-     List<Operable> operables = new ArrayList<>();
+     ProgramBuilder programa = new ProgramBuilder();
+
 
      @Test
     void incrementarTresVecesProgramCount(){
-         operables.add(new NOP(micro));
-         operables.add(new NOP(micro));
-         operables.add(new NOP(micro));
-         micro.run(operables);
+         programa.agregarInstruccion(new NOP(micro));
+         programa.agregarInstruccion(new NOP(micro));
+         programa.agregarInstruccion(new NOP(micro));
+         programa.ejecutarPrograma(micro);
          assertEquals(3,micro.getProgramCounter());
      }
 
      @Test
     void testeandoAdd(){
-         micro.setAcumuladorA(20);
-         micro.setAcumuladorB(25);
-         operables.add(new ADD(micro));
-         micro.run(operables);
+         programa.setearAcumA(micro,20);
+         programa.setearAcumB(micro,25);
+         programa.agregarInstruccion(new ADD(micro));
+         programa.ejecutarPrograma(micro);
          assertEquals(45,micro.getAcumuladorA());
          assertEquals(0,micro.getAcumuladorB());
      }
 
      @Test
     void testeandoSwap(){
-         micro.setAcumuladorA(20);
-         micro.setAcumuladorB(55);
-         operables.add(new SWAP(micro));
-         micro.run(operables);
+         programa.setearAcumA(micro,20);
+         programa.setearAcumB(micro,55);
+         programa.agregarInstruccion(new SWAP(micro));
+         programa.ejecutarPrograma(micro);
          assertEquals(55,micro.getAcumuladorA());
          assertEquals(20,micro.getAcumuladorB());
      }
 
      @Test
     void testeandoLod(){
-         micro.setAcumuladorA(20);
-         micro.setAddr(5);
-         micro.setAcumuladorA(0);
-         operables.add(new LOD(5));
-         micro.run(operables);
+         programa.setearAcumA(micro,20);
+         programa.setearAddr(micro,5);
+         programa.setearAcumA(micro,0);
+         programa.agregarInstruccion(new LOD(5));
+         programa.ejecutarPrograma(micro);
+
          assertEquals(20,micro.getAddr(5));
      }
 
      @Test
     void testeandoStr(){
-         micro.setAcumuladorA(28);
-         micro.setAddr(1023);
-         operables.add(new STR(1023));
-         micro.run(operables);
+         programa.setearAcumA(micro,28);
+         programa.setearAddr(micro,1023);
+         programa.agregarInstruccion(new STR(1023));
+         programa.ejecutarPrograma(micro);
+
          assertEquals(28,micro.getAddr(1023));
      }
 
      @Test
     void testeandoVal(){
-         operables.add(new LODV(32));
-         micro.run(operables);
+         programa.agregarInstruccion(new LODV(32));
+         programa.ejecutarPrograma(micro);
+
          assertEquals(32,micro.getAcumuladorA());
      }
      /// /////////// TEST REQUERIDOS ////////////////////////////////////////////////////
      @Test
     void sumar20Mas17(){
-         operables.add(new LODV(20));
-         operables.add(new SWAP(micro));
-         operables.add(new LODV(17));
-         operables.add(new ADD(micro));
-         micro.run(operables);
+         programa.agregarInstruccion(new LODV(20));
+         programa.agregarInstruccion(new SWAP(micro));
+         programa.agregarInstruccion(new LODV(17));
+         programa.agregarInstruccion(new ADD(micro));
+         programa.ejecutarPrograma(micro);
+
          assertEquals(37,micro.getAcumuladorA());
          assertEquals(0,micro.getAcumuladorB());
          assertEquals(4,micro.getProgramCounter());
@@ -81,16 +87,17 @@ public class MicroprocesadorTest {
 
      @Test
     void sumar2Mas8Mas5(){
-         operables.add(new LODV(2));
-         operables.add(new STR(0));
-         operables.add(new LODV(8));
-         operables.add(new SWAP(micro));
-         operables.add(new LODV(5));
-         operables.add(new ADD(micro));
-         operables.add(new SWAP(micro));
-         operables.add(new LOD(0));
-         operables.add(new ADD(micro));
-         micro.run(operables);
+         programa.agregarInstruccion(new LODV(2));
+         programa.agregarInstruccion(new STR(0));
+         programa.agregarInstruccion(new LODV(8));
+         programa.agregarInstruccion(new SWAP(micro));
+         programa.agregarInstruccion(new LODV(5));
+         programa.agregarInstruccion(new ADD(micro));
+         programa.agregarInstruccion(new SWAP(micro));
+         programa.agregarInstruccion(new LOD(0));
+         programa.agregarInstruccion(new ADD(micro));
+         programa.ejecutarPrograma(micro);
+
          assertEquals(15,micro.getAcumuladorA());
          assertEquals(0,micro.getAcumuladorB());
 
